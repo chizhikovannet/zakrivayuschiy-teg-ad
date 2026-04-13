@@ -314,7 +314,7 @@
       </article>
     </main>
     <footer class="footer">
-      <button class="button save-button" type="button" onclick="window['dialog'].showModal()" aria-controls="dialog"> 
+      <button class="button save-button" type="button" aria-controls="dialog"> 
         <svg class="floppy">
           <use href="./svg/floppy.svg#floppy"></use>
         </svg>
@@ -328,10 +328,40 @@
         <use href="./svg/floppy.svg#floppy"></use>
       </svg>
       <h2 class="modal__title">Вставьте дискету, чтобы продолжить</h2>
-      <button type="button" class="button save-button modal__button" onclick="window['dialog'].close()">
+      <button type="button" class="button save-button modal__button">
         <span class="button__text">Ок</span>          
       </button>
     </dialog>
+    <script src="./scripts/like.js"></script>
+    <script>
+      const dialog = document.getElementById('dialog');
+      const saveButton = document.querySelector('.save-button');
+      const okButton = document.querySelector('.modal__button');
+      
+      saveButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        dialog.showModal();
+      });
+      
+      okButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        dialog.close();
+      });
+      
+      dialog.addEventListener('click', (e) => {
+        const rect = dialog.getBoundingClientRect();
+        const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+          rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+        if (!isInDialog) {
+          dialog.close();
+        }
+      });
+      
+      dialog.addEventListener('cancel', (e) => {
+        e.preventDefault();
+        dialog.close();
+      });
+    </script>
     <script src="./scripts/like.js"></script>
   </body>
 </html>
