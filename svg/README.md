@@ -1,1 +1,1 @@
-https://github.com/chizhikovannet/zakrivayuschiy-teg-ad
+В этой папке будут храниться все необходимые SVG-файлы для сайта.
