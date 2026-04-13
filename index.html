@@ -314,7 +314,7 @@
       </article>
     </main>
     <footer class="footer">
-      <button class="button save-button" type="button" aria-controls="dialog"> 
+      <button class="button save-button" type="button" id="saveButton"> 
         <svg class="floppy">
           <use href="./svg/floppy.svg#floppy"></use>
         </svg>
@@ -328,40 +328,89 @@
         <use href="./svg/floppy.svg#floppy"></use>
       </svg>
       <h2 class="modal__title">Вставьте дискету, чтобы продолжить</h2>
-      <button type="button" class="button save-button modal__button">
+      <button type="button" class="button save-button modal__button" id="okButton">
         <span class="button__text">Ок</span>          
       </button>
     </dialog>
     <script src="./scripts/like.js"></script>
     <script>
-      const dialog = document.getElementById('dialog');
-      const saveButton = document.querySelector('.save-button');
-      const okButton = document.querySelector('.modal__button');
-      
-      saveButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        dialog.showModal();
-      });
-      
-      okButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        dialog.close();
-      });
-      
-      dialog.addEventListener('click', (e) => {
-        const rect = dialog.getBoundingClientRect();
-        const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
-          rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
-        if (!isInDialog) {
+        const dialog = document.getElementById('dialog');
+        const saveButton = document.querySelector('.save-button');
+        const okButton = document.querySelector('.modal__button');
+        
+        saveButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          dialog.showModal();
+        });
+        
+        okButton.addEventListener('click', (e) => {
+          e.preventDefault();
           dialog.close();
-        }
-      });
+        });
+        
+        dialog.addEventListener('click', (e) => {
+          const rect = dialog.getBoundingClientRect();
+          const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+            rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+          if (!isInDialog) {
+            dialog.close();
+          }
+        });
+        
+        dialog.addEventListener('cancel', (e) => {
+          e.preventDefault();
+          dialog.close();
+        });
+      </script>
+      <script src="./scripts/like.js"></script>
+      <script>
+    (function() {
+      const saveButton = document.getElementById('saveButton');
+      const dialog = document.getElementById('dialog');
+      const okButton = document.getElementById('okButton');
       
-      dialog.addEventListener('cancel', (e) => {
-        e.preventDefault();
-        dialog.close();
-      });
-    </script>
-    <script src="./scripts/like.js"></script>
+      if (saveButton) {
+        saveButton.addEventListener('click', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (dialog && typeof dialog.showModal === 'function') {
+            dialog.showModal();
+          }
+          return false;
+        });
+      }
+      
+      if (okButton) {
+        okButton.addEventListener('click', function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (dialog && typeof dialog.close === 'function') {
+            dialog.close();
+          }
+          return false;
+        });
+      }
+      
+      if (dialog) {
+        dialog.addEventListener('click', function(event) {
+          const rect = dialog.getBoundingClientRect();
+          const isInDialog = (
+            rect.top <= event.clientY && 
+            event.clientY <= rect.top + rect.height &&
+            rect.left <= event.clientX && 
+            event.clientX <= rect.left + rect.width
+          );
+          if (!isInDialog) {
+            dialog.close();
+          }
+        });
+        
+        dialog.addEventListener('cancel', function(event) {
+          event.preventDefault();
+          dialog.close();
+        });
+      }
+    })();
+  </script>
   </body>
 </html>
